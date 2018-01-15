@@ -1,0 +1,31 @@
+@startuml
+
+enum ActorType{
+    OPERATOR("operator")
+    SUPERVISOR("supervisor")
+    DIRECTOR("director")
+}
+
+class Actor{
+    name:String
+    calls:List<Call>
+    actorType:ActorType
+
+}
+
+class Call{
+    customerName:String
+    callStartDate:Date
+    callEndDate:Date
+}
+
+class Dispatcher{
+    operators: SynchronousQueue<Actors>
+    supervisors: SynchronousQueue<Actor>
+    directors: SynchronousQueue<Actor>
+}
+
+Dispatcher : dispatchCall(call:Call) : Actor
+Actor ----- Call
+Actor ----- ActorType
+@enduml
