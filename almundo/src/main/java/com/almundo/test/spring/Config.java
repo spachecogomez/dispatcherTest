@@ -6,6 +6,7 @@ import com.almundo.test.model.ActorType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,7 @@ public class Config {
     }
 
     @Bean
+    @Scope("singleton")
     public Dispatcher getDispatcher(Queue<Actor> operators, Queue<Actor> supervisors, Queue<Actor> directors){
         return new Dispatcher(operators, supervisors, directors);
     }

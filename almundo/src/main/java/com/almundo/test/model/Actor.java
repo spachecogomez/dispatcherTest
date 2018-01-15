@@ -1,5 +1,7 @@
 package com.almundo.test.model;
 
+import com.fasterxml.jackson.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,16 @@ import java.util.List;
  *
  * Created by sebastianpacheco on 14/01/18.
  */
+@JsonIdentityInfo(generator=ObjectIdGenerators.StringIdGenerator.class, property="@id")
 public class Actor {
+
+    private String id;
 
     private String name;
 
     private ActorType actorType;
 
+    @JsonBackReference
     private List<Call> calls;
 
     public Actor(){
@@ -58,6 +64,7 @@ public class Actor {
     public void setCalls(List<Call> calls) {
         this.calls = calls;
     }
+
 
     @Override
     public String toString(){

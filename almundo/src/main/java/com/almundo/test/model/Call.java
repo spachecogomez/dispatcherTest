@@ -1,5 +1,7 @@
 package com.almundo.test.model;
 
+import com.fasterxml.jackson.annotation.*;
+
 import java.util.Date;
 
 /**
@@ -11,7 +13,10 @@ import java.util.Date;
  *
  * Created by sebastianpacheco on 14/01/18.
  */
+@JsonIdentityInfo(generator=ObjectIdGenerators.StringIdGenerator.class, property="@id")
 public class Call {
+
+    private String id;
 
     private String customerName;
 
@@ -19,6 +24,7 @@ public class Call {
 
     private Date callEndDate;
 
+    private Actor attendant;
 
     public String getCustomerName() {
         return customerName;
@@ -43,4 +49,27 @@ public class Call {
     public void setCallEndDate(Date callEndDate) {
         this.callEndDate = callEndDate;
     }
+
+    public Actor getAttendant() {
+        return attendant;
+    }
+
+    public void setAttendant(Actor attendant) {
+        this.attendant = attendant;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("[Call| CustomerName: %s]",this.customerName);
+    }
+
+
 }

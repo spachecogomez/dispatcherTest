@@ -17,6 +17,7 @@ class Call{
     customerName:String
     callStartDate:Date
     callEndDate:Date
+    attendant: Actor
 }
 
 class Dispatcher{
@@ -28,4 +29,6 @@ class Dispatcher{
 Dispatcher : dispatchCall(call:Call) : Actor
 Actor ----- Call
 Actor ----- ActorType
+Actor ----- Dispatcher
+Call  ----- Dispatcher
 @enduml
