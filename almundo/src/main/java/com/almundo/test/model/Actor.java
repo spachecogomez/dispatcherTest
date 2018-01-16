@@ -17,8 +17,6 @@ import java.util.List;
 @JsonIdentityInfo(generator=ObjectIdGenerators.StringIdGenerator.class, property="@id")
 public class Actor {
 
-    private String id;
-
     private String name;
 
     private ActorType actorType;
@@ -69,5 +67,10 @@ public class Actor {
     @Override
     public String toString(){
         return String.format("[ActorType : %s | Name: %s]", actorType.getValue(), name);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        return ((Actor)o).getName().equals(this.getName());
     }
 }

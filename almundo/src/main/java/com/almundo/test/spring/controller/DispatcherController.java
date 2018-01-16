@@ -29,19 +29,20 @@ public class DispatcherController {
     private Dispatcher dispatcher;
 
     @RequestMapping(path = "/v1/dispatch",method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Call> dispatchCall(@RequestBody Call call){
+    public ResponseEntity<Call> dispatchCall(@RequestBody Call call) throws Exception{
         call.setCallStartDate(new Date());
-        log.debug(String.format("Received Call to dispatch: %s",call.toString()));
+        log.debug(String.format("Received Call to dispatch: %s",call));
         Actor actor = dispatcher.dispatchCall(call);
         call.setAttendant(actor);
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");
-        log.debug(String.format("Call attended by : %s at %s", actor.toString(), df.format(call.getCallStartDate())));
+        log.debug(String.format("Call attended by : %s at %s", actor, df.format(call.getCallStartDate())));
         return ResponseEntity.ok(call);
     }
 
     @RequestMapping(path = "/v1/dispatch",method = RequestMethod.DELETE, consumes = "application/json", produces = "application/json")
     public void endCall(@RequestBody  Call call){
-        log.debug(String.format("Call to be ended: %s",call.toString()));
+        log.debug(String.format("Call to be ended: %s",call.getAttendant()));
+        dispatcher.enqueueActor(call.getAttendant());
     }
 
     @RequestMapping(path = "/v1/status", method = RequestMethod.GET, consumes = "application/json", produces = "application/json")

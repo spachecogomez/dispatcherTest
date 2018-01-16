@@ -16,7 +16,13 @@ import java.util.Date;
 @JsonIdentityInfo(generator=ObjectIdGenerators.StringIdGenerator.class, property="@id")
 public class Call {
 
-    private String id;
+    public Call(){
+
+    }
+
+    public Call(String customerName){
+        this.customerName = customerName;
+    }
 
     private String customerName;
 
@@ -56,14 +62,6 @@ public class Call {
 
     public void setAttendant(Actor attendant) {
         this.attendant = attendant;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

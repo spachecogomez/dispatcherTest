@@ -1,13 +1,16 @@
 package com.almundo.test.dispatcher;
 
 import com.almundo.test.model.Actor;
+import com.almundo.test.model.ActorType;
 import com.almundo.test.model.Call;
 import com.almundo.test.model.Status;
+import com.almundo.test.model.exception.NoAgentAvailable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  *
@@ -22,13 +25,13 @@ public class Dispatcher {
 
     private Logger log = LoggerFactory.getLogger(Dispatcher.class);
 
-    private Queue<Actor> operators;
+    private ArrayBlockingQueue<Actor> operators;
 
-    private Queue<Actor> supervisors;
+    private ArrayBlockingQueue<Actor> supervisors;
 
-    private Queue<Actor> directors;
+    private ArrayBlockingQueue<Actor> directors;
 
-    public Dispatcher(Queue<Actor> operators, Queue<Actor> supervisors, Queue<Actor> directors){
+    public Dispatcher(ArrayBlockingQueue<Actor> operators, ArrayBlockingQueue<Actor> supervisors, ArrayBlockingQueue<Actor> directors){
         this.setOperators(operators);
         this.setSupervisors(supervisors);
         this.setDirectors(directors);
@@ -42,43 +45,64 @@ public class Dispatcher {
         return  status;
     }
 
-    public Actor dispatchCall(Call call){
-        call.setCallStartDate(new Date());
+    public Actor dispatchCall(Call call) throws NoAgentAvailable {
         Actor actor;
-        if(!getOperators().isEmpty()){
-            actor = getOperators().poll();
-        }else if(getSupervisors().isEmpty()){
-            actor = getSupervisors().poll();
-        }else {
-            actor = getDirectors().poll();
+        synchronized (this){
+            call.setCallStartDate(new Date());
+            if(!getOperators().isEmpty()){
+                actor = getOperators().remove();
+            }else if(!getSupervisors().isEmpty()){
+                actor = getSupervisors().poll();
+            }else if(!getDirectors().isEmpty()){
+                actor = getDirectors().poll();
+            }else{
+                throw new NoAgentAvailable();
+            }
+            call.setAttendant(actor);
+            actor.getCalls().add(call);
         }
-        call.setAttendant(actor);
-        actor.getCalls().add(call);
+
         return actor;
     }
 
+    public void enqueueActor(Actor actor) {
+        log.debug(String.format("Enqueueing and actor of type %s",actor.getActorType().getValue()));
+        switch (actor.getActorType()){
+            case OPERATOR:
+                getOperators().add(actor);
+                break;
+            case DIRECTOR:
+                getDirectors().add(actor);
+                break;
+            case SUPERVISOR:
+                getSupervisors().add(actor);
+                break;
 
-    public Queue<Actor> getOperators() {
+        }
+    }
+
+
+    public ArrayBlockingQueue<Actor> getOperators() {
         return operators;
     }
 
-    public void setOperators(Queue<Actor> operators) {
+    public void setOperators(ArrayBlockingQueue<Actor> operators) {
         this.operators = operators;
     }
 
-    public Queue<Actor> getSupervisors() {
+    public ArrayBlockingQueue<Actor> getSupervisors() {
         return supervisors;
     }
 
-    public void setSupervisors(Queue<Actor> supervisors) {
+    public void setSupervisors(ArrayBlockingQueue<Actor> supervisors) {
         this.supervisors = supervisors;
     }
 
-    public Queue<Actor> getDirectors() {
+    public ArrayBlockingQueue<Actor> getDirectors() {
         return directors;
     }
 
-    public void setDirectors(Queue<Actor> directors) {
+    public void setDirectors(ArrayBlockingQueue<Actor> directors) {
         this.directors = directors;
     }
 }

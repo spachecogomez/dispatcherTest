@@ -22,8 +22,8 @@ public class Config {
 
     @Bean
     @Qualifier("operators")
-    public Queue<Actor> operators(){
-        Queue<Actor> operators = new ArrayBlockingQueue<Actor>(10);
+    public ArrayBlockingQueue<Actor> operators(){
+        ArrayBlockingQueue<Actor> operators = new ArrayBlockingQueue<Actor>(10);
         Actor operator1 = new Actor("operator1", ActorType.OPERATOR);
         Actor operator2 = new Actor("operator2", ActorType.OPERATOR);
         Actor operator3 = new Actor("operator3", ActorType.OPERATOR);
@@ -49,8 +49,8 @@ public class Config {
 
     @Bean
     @Qualifier("supervisors")
-    public Queue<Actor> supervisors(){
-        Queue<Actor> supervisors = new ArrayBlockingQueue<Actor>(10);
+    public ArrayBlockingQueue<Actor> supervisors(){
+        ArrayBlockingQueue<Actor> supervisors = new ArrayBlockingQueue<Actor>(10);
         Actor supervisor1 = new Actor("supervisor1", ActorType.SUPERVISOR);
         Actor supervisor2 = new Actor("supervisor2", ActorType.SUPERVISOR);
         Actor supervisor3 = new Actor("supervisor3", ActorType.SUPERVISOR);
@@ -76,18 +76,18 @@ public class Config {
 
     @Bean
     @Qualifier("directors")
-    public Queue<Actor> directors(){
-        Queue<Actor> directors = new ArrayBlockingQueue<Actor>(10);
+    public ArrayBlockingQueue<Actor> directors(){
+        ArrayBlockingQueue<Actor> directors = new ArrayBlockingQueue<Actor>(10);
         Actor director1 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director2 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director3 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director4 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director5 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director6 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director7 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director8 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director9 = new Actor("director1", ActorType.DIRECTOR);
-        Actor director10 = new Actor("director1", ActorType.DIRECTOR);
+        Actor director2 = new Actor("director2", ActorType.DIRECTOR);
+        Actor director3 = new Actor("director3", ActorType.DIRECTOR);
+        Actor director4 = new Actor("director4", ActorType.DIRECTOR);
+        Actor director5 = new Actor("director5", ActorType.DIRECTOR);
+        Actor director6 = new Actor("director6", ActorType.DIRECTOR);
+        Actor director7 = new Actor("director7", ActorType.DIRECTOR);
+        Actor director8 = new Actor("director8", ActorType.DIRECTOR);
+        Actor director9 = new Actor("director9", ActorType.DIRECTOR);
+        Actor director10 = new Actor("director110", ActorType.DIRECTOR);
         directors.add(director1);
         directors.add(director2);
         directors.add(director3);
@@ -103,7 +103,7 @@ public class Config {
 
     @Bean
     @Scope("singleton")
-    public Dispatcher getDispatcher(Queue<Actor> operators, Queue<Actor> supervisors, Queue<Actor> directors){
+    public Dispatcher getDispatcher(ArrayBlockingQueue<Actor> operators, ArrayBlockingQueue<Actor> supervisors, ArrayBlockingQueue<Actor> directors){
         return new Dispatcher(operators, supervisors, directors);
     }
 }
